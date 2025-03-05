@@ -9,3 +9,4 @@ Config/secrets/
 CMakeLists.txt
 Package.resolved
 .swiftpm
+.index-build/

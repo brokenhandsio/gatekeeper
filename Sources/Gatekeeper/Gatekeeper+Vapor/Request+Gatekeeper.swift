@@ -1,7 +1,7 @@
 import Vapor
 
-public extension Request {
-    func gatekeeper(
+extension Request {
+    public func gatekeeper(
         config: GatekeeperConfig? = nil,
         cache: Cache? = nil,
         keyMaker: GatekeeperKeyMaker? = nil

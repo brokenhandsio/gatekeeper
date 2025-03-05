@@ -1,5 +1,4 @@
-# Gatekeeper 👮
-[![Swift Version](https://img.shields.io/badge/Swift-5.3-brightgreen.svg)](http://swift.org)
+
 [![Vapor Version](https://img.shields.io/badge/Vapor-4-30B6FC.svg)](http://vapor.codes)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/nodes-vapor/gatekeeper/master/LICENSE)
 
@@ -11,32 +10,38 @@ It works by adding the clients identifier to the cache and count how many reques
 
 ## 📦 Installation
 
-Update your `Package.swift` dependencies:
+Add Gatekeeper as a dependency in your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/nodes-vapor/gatekeeper.git", from: "4.0.0"),
-```
+// swift-tools-version:5.9
+import PackageDescription
 
-as well as to your target (e.g. "App"):
-
-```swift
-targets: [
-    .target(name: "App", dependencies: [..., "Gatekeeper", ...]),
-    // ...
-]
+let package = Package(
+    name: "YourProject",
+    dependencies: [
+        // ...
+        .package(url: "https://github.com/brokenhandsio/gatekeeper.git", branch: "main"),
+    ],
+    targets: [
+        .target(name: "App", dependencies: [
+            .product(name: "Gatekeeper", package: "gatekeeper"),
+        ]),
+    ]
+)
 ```
 
 ## Getting started 🚀
 
 ### Configuration
 
-in configure.swift:
+In `configure.swift`:
 ```swift
 import Gatekeeper
 
-// [...]
-
+// Configure caching
 app.caches.use(.memory)
+
+// Configure Gatekeeper
 app.gatekeeper.config = .init(maxRequests: 10, per: .second)
 ```
 
@@ -45,19 +50,19 @@ app.gatekeeper.config = .init(maxRequests: 10, per: .second)
 You can add the `GatekeeperMiddleware` to specific routes or to all.
 
 **Specific routes**
-in routes.swift:
+In `routes.swift`:
 ```swift
-let protectedRoutes = router.grouped(GatekeeperMiddleware())
+let protectedRoutes = app.grouped(GatekeeperMiddleware())
 protectedRoutes.get("protected/hello") { req in
     return "Protected Hello, World!"
 }
 ```
 
 **For all requests**
-in configure.swift:
+In `configure.swift`:
 ```swift
 // Register middleware
-app.middlewares.use(GatekeeperMiddleware())
+app.middleware.use(GatekeeperMiddleware())
 ```
 
 #### Customizing config
@@ -79,9 +84,9 @@ app.gatekeeper.keyMakers.use(.hostname) // default
 This is an example of a key maker that uses the user's ID to identify them.
 ```swift
 struct UserIDKeyMaker: GatekeeperKeyMaker {
-    public func make(for req: Request) -> EventLoopFuture<String> {
+    public func make(for req: Request) async throws -> String {
         let userID = try req.auth.require(User.self).requireID()        
-        return req.eventLoop.future("gatekeeper_" + userID.uuidString)
+        return "gatekeeper_" + userID.uuidString
     }
 }
 ```
@@ -111,14 +116,3 @@ app.cache.use(.memory)
 
 ### Custom cache
 You can override which cache to use by creating your own type that conforms to the `Cache` protocol from Vapor. Use `app.gatekeeper.caches.use()` to configure which cache to use.
-
-
-## Credits 🏆
-
-This package is developed and maintained by the Vapor team at [Nodes](https://www.nodesagency.com).
-The package owner for this project is [Christian](https://github.com/cweinberger).
-Special thanks goes to [madsodgaard](https://github.com/madsodgaard) for his work on the Vapor 4 version!
-
-## License 📄
-
-This package is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

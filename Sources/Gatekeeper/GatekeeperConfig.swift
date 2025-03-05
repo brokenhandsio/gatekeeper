@@ -1,7 +1,7 @@
 import Vapor
 
-public struct GatekeeperConfig {
-    public enum Interval {
+public struct GatekeeperConfig: Sendable {
+    public enum Interval: Sendable {
         case second
         case minute
         case hour
@@ -18,14 +18,10 @@ public struct GatekeeperConfig {
 
     var refreshInterval: Double {
         switch interval {
-        case .second:
-            return 1
-        case .minute:
-            return 60
-        case .hour:
-            return 3_600
-        case .day:
-            return 86_400
+        case .second: 1
+        case .minute: 60
+        case .hour: 3_600
+        case .day: 86_400
         }
     }
 }

@@ -1,18 +1,18 @@
-// swift-tools-version:5.3
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
     name: "gatekeeper",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v13)
     ],
     products: [
         .library(
             name: "Gatekeeper",
-            targets: ["Gatekeeper"]),
+            targets: ["Gatekeeper"])
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.44.0"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.113.0")
     ],
     targets: [
         .target(
@@ -24,7 +24,8 @@ let package = Package(
             name: "GatekeeperTests",
             dependencies: [
                 "Gatekeeper",
-                .product(name: "XCTVapor", package: "vapor")
-            ]),
+                .product(name: "VaporTesting", package: "vapor"),
+            ]
+        ),
     ]
 )
