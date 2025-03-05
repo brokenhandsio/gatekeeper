@@ -7,6 +7,5 @@ Config/secrets/
 .DS_Store
 .swift-version
 CMakeLists.txt
-Package.resolved
 .swiftpm
 .index-build/
