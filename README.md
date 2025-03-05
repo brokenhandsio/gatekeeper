@@ -1,6 +1,4 @@
-
-[![Vapor Version](https://img.shields.io/badge/Vapor-4-30B6FC.svg)](http://vapor.codes)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/nodes-vapor/gatekeeper/master/LICENSE)
+# Gatekeeper
 
 Gatekeeper is a middleware that restricts the number of requests from clients, based on their IP address **(can be customized)**.
 It works by adding the clients identifier to the cache and count how many requests the clients can make during the Gatekeeper's defined lifespan and give back an HTTP 429(Too Many Requests) if the limit has been reached. The number of requests left will be reset when the defined timespan has been reached.
@@ -8,12 +6,12 @@ It works by adding the clients identifier to the cache and count how many reques
 **Please take into consideration that multiple clients can be using the same IP address. eg. public wifi**
 
 
-## 📦 Installation
+## Installation
 
 Add Gatekeeper as a dependency in your `Package.swift` file:
 
 ```swift
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
@@ -30,7 +28,7 @@ let package = Package(
 )
 ```
 
-## Getting started 🚀
+## Getting started
 
 ### Configuration
 
@@ -70,7 +68,7 @@ By default `GatekeeperMiddleware` uses `app.gatekeeper.config` as its configurat
 However, you can pass a custom configuration to each `GatekeeperMiddleware` type via the initializer
 `GatekeeperMiddleware(config:)`. This allows you to set configuration on a per-route basis.
 
-## Key Makers 🔑
+## Key Makers
 By default Gatekeeper uses the client's hostname (IP address) to identify them. This can cause issues where multiple clients are connected from the same network. Therefore, you can customize how Gatekeeper should identify the client by using the `GatekeeperKeyMaker` protocol.
 
 `GatekeeperHostnameKeyMaker` is used by default.
@@ -105,7 +103,7 @@ extension Application.Gatekeeper.KeyMakers.Provider {
 app.gatekeeper.keyMakers.use(.userID)
 ```
 
-## Cache 🗄
+## Cache
 Gatekeeper uses the same cache as configured by `app.caches.use()` from Vapor, by default.
 Therefore it is **important** to set up Vapor's cache if you're using this default behaviour. You can use an in-memory cache for Vapor like so:
 
