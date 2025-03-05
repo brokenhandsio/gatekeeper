@@ -1,4 +1,4 @@
-# Gatekeeper
+# Gatekeeper
 
 Gatekeeper is a middleware that restricts the number of requests from clients, based on their IP address **(can be customized)**.
 It works by adding the clients identifier to the cache and count how many requests the clients can make during the Gatekeeper's defined lifespan and give back an HTTP 429(Too Many Requests) if the limit has been reached. The number of requests left will be reset when the defined timespan has been reached.
